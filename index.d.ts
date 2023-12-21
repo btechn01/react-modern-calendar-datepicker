@@ -38,9 +38,46 @@ export interface CalendarProps<TValue extends Value> {
   customDaysClassName?: CustomDayClassNameItem[];
 }
 
+export interface CalendarYearMonthProps<TValue extends Value> {
+  value: TValue;
+  onChange?(value: TValue): void;
+  calendarClassName?: string;
+  colorPrimary?: string;
+  colorPrimaryLight?: string;
+  slideAnimationDuration?: string;
+  minimumDate?: Day;
+  maximumDate?: Day;
+  selectorStartingYear?: number;
+  selectorEndingYear?: number;
+  locale?: string | Locale;
+  renderFooter?: React.FC;
+}
+export interface CalendarYearProps<TValue extends Value> {
+  value: TValue;
+  onChange?(value: TValue): void;
+  calendarClassName?: string;
+  colorPrimary?: string;
+  colorPrimaryLight?: string;
+  slideAnimationDuration?: string;
+  minimumDate?: Day;
+  maximumDate?: Day;
+  selectorStartingYear?: number;
+  selectorEndingYear?: number;
+  locale?: string | Locale;
+  renderFooter?: React.FC;
+}
+
 export function Calendar(props: Optional<CalendarProps<DayValue>, 'value'>): React.ReactElement;
 export function Calendar(props: CalendarProps<Day[]>): React.ReactElement;
 export function Calendar(props: CalendarProps<DayRange>): React.ReactElement;
+
+export function CalendarYearMonth(
+  props: Optional<CalendarYearMonthProps<DayValue>, 'value'>,
+): React.ReactElement;
+
+export function CalendarYear(
+  props: Optional<CalendarYearProps<DayValue>, 'value'>,
+): React.ReactElement;
 
 export type RenderInputProps = {
   ref: React.RefObject<HTMLElement>;
@@ -58,7 +95,9 @@ export interface DatePickerProps<TValue extends Value> extends CalendarProps<TVa
 
 type Optional<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
 
-declare function DatePicker(props: Optional<DatePickerProps<DayValue>, 'value'>): React.ReactElement;
+declare function DatePicker(
+  props: Optional<DatePickerProps<DayValue>, 'value'>,
+): React.ReactElement;
 declare function DatePicker(props: DatePickerProps<Day[]>): React.ReactElement;
 declare function DatePicker(props: DatePickerProps<DayRange>): React.ReactElement;
 
@@ -66,7 +105,7 @@ type WeekDay = {
   name: string;
   short: string;
   isWeekend?: boolean;
-}
+};
 
 export type Utils = {
   monthsList: string[];
@@ -94,7 +133,9 @@ export interface Locale {
   getMonthLength: (date: Day) => number;
   transformDigit: (digit: CalendarDigit) => CalendarDigit;
   nextMonth: string;
+  nextYear: string;
   previousMonth: string;
+  previousYear: string;
   openMonthSelector: string;
   openYearSelector: string;
   closeMonthSelector: string;

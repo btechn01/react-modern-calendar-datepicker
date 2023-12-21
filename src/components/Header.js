@@ -15,6 +15,7 @@ const Header = ({
   isMonthSelectorOpen,
   isYearSelectorOpen,
   locale,
+  showYearOnly,
 }) => {
   const headerElement = useRef(null);
   const monthYearWrapperElement = useRef(null);
@@ -43,45 +44,49 @@ const Header = ({
     const monthText = headerElement.current.querySelector(
       '.Calendar__monthYear.-shown .Calendar__monthText',
     );
-    const yearText = monthText.nextSibling;
-    const hasActiveBackground = element => element.classList.contains('-activeBackground');
-    const isInitialRender =
-      !isOpen && !hasActiveBackground(monthText) && !hasActiveBackground(yearText);
-    if (isInitialRender) return;
+    if (!showYearOnly) {
+      const yearText = monthText.nextSibling;
+      const hasActiveBackground = element => element.classList.contains('-activeBackground');
+      const isInitialRender =
+        !isOpen && !hasActiveBackground(monthText) && !hasActiveBackground(yearText);
+      if (isInitialRender) return;
 
-    const arrows = [...headerElement.current.querySelectorAll('.Calendar__monthArrowWrapper')];
-    const hasMonthSelectorToggled = isMonthSelectorOpen || hasActiveBackground(monthText);
-    const primaryElement = hasMonthSelectorToggled ? monthText : yearText;
-    const secondaryElement = hasMonthSelectorToggled ? yearText : monthText;
+      const arrows = [...headerElement.current.querySelectorAll('.Calendar__monthArrowWrapper')];
+      const hasMonthSelectorToggled = isMonthSelectorOpen || hasActiveBackground(monthText);
+      const primaryElement = hasMonthSelectorToggled ? monthText : yearText;
+      const secondaryElement = hasMonthSelectorToggled ? yearText : monthText;
 
-    let translateXDirection = hasMonthSelectorToggled ? 1 : -1;
-    if (isRtl) translateXDirection *= -1;
-    const scale = !isOpen ? 0.95 : 1;
-    const translateX = !isOpen ? 0 : `${(translateXDirection * secondaryElement.offsetWidth) / 2}`;
-    if (!isOpen) {
-      secondaryElement.removeAttribute('aria-hidden');
-    } else {
-      secondaryElement.setAttribute('aria-hidden', true);
-    }
-    secondaryElement.setAttribute('tabindex', isOpen ? '-1' : '0');
-    secondaryElement.style.transform = '';
-    primaryElement.style.transform = `scale(${scale}) ${
-      translateX ? `translateX(${translateX}px)` : ''
-    }`;
-    primaryElement.classList.toggle('-activeBackground');
-    secondaryElement.classList.toggle('-hidden');
-    arrows.forEach(arrow => {
-      const isHidden = arrow.classList.contains('-hidden');
-      arrow.classList.toggle('-hidden');
-      if (isHidden) {
-        arrow.removeAttribute('aria-hidden');
-        arrow.setAttribute('tabindex', '0');
+      let translateXDirection = hasMonthSelectorToggled ? 1 : -1;
+      if (isRtl) translateXDirection *= -1;
+      const scale = !isOpen ? 0.95 : 1;
+      const translateX = !isOpen
+        ? 0
+        : `${(translateXDirection * secondaryElement.offsetWidth) / 2}`;
+      if (!isOpen) {
+        secondaryElement.removeAttribute('aria-hidden');
       } else {
-        arrow.setAttribute('aria-hidden', true);
-        arrow.setAttribute('tabindex', '-1');
+        secondaryElement.setAttribute('aria-hidden', true);
       }
-    });
-  }, [isMonthSelectorOpen, isYearSelectorOpen]);
+      secondaryElement.setAttribute('tabindex', isOpen ? '-1' : '0');
+      secondaryElement.style.transform = '';
+      primaryElement.style.transform = `scale(${scale}) ${
+        translateX ? `translateX(${translateX}px)` : ''
+      }`;
+      primaryElement.classList.toggle('-activeBackground');
+      secondaryElement.classList.toggle('-hidden');
+      arrows.forEach(arrow => {
+        const isHidden = arrow.classList.contains('-hidden');
+        arrow.classList.toggle('-hidden');
+        if (isHidden) {
+          arrow.removeAttribute('aria-hidden');
+          arrow.setAttribute('tabindex', '0');
+        } else {
+          arrow.setAttribute('aria-hidden', true);
+          arrow.setAttribute('tabindex', '-1');
+        }
+      });
+    }
+  }, [isMonthSelectorOpen, isYearSelectorOpen, showYearOnly]);
 
   const getMonthYearText = isInitialActiveChild => {
     const date = getSlideDate({
@@ -126,16 +131,19 @@ const Header = ({
         key={String(isInitialActiveChild)}
         {...hiddenStatus}
       >
-        <button
-          onClick={onMonthSelect}
-          type="button"
-          className="Calendar__monthText"
-          aria-label={isMonthSelectorOpen ? closeMonthSelector : openMonthSelector}
-          tabIndex={isActiveMonth ? '0' : '-1'}
-          {...hiddenStatus}
-        >
-          {month}
-        </button>
+        {showYearOnly ? null : (
+          <button
+            onClick={onMonthSelect}
+            type="button"
+            className="Calendar__monthText"
+            aria-label={isMonthSelectorOpen ? closeMonthSelector : openMonthSelector}
+            tabIndex={isActiveMonth ? '0' : '-1'}
+            {...hiddenStatus}
+          >
+            {month}
+          </button>
+        )}
+
         <button
           onClick={onYearSelect}
           type="button"

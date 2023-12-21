@@ -28,6 +28,8 @@ const localeLanguages = {
     },
     nextMonth: 'Next Month',
     previousMonth: 'Previous Month',
+    nextYear: 'Next Year',
+    previousYear: 'Previous Year',
     openMonthSelector: 'Open Month Selector',
     openYearSelector: 'Open Year Selector',
     closeMonthSelector: 'Close Month Selector',
