@@ -68,6 +68,14 @@ const CalendarYear = ({
     onChange({ year });
   };
 
+  const onYearChange = direction => {
+    if (direction === 'PREVIOUS') {
+      selectYear(activeDate.year - 1);
+    } else {
+      selectYear(activeDate.year + 1);
+    }
+  };
+
   return (
     <div
       className={`Calendar -noFocusOutline ${calendarClassName} -${isRtl ? 'rtl' : 'ltr'}`}
@@ -84,6 +92,7 @@ const CalendarYear = ({
         minimumDate={minimumDate}
         activeDate={activeDate}
         onYearSelect={toggleYearSelector}
+        onYearChange={onYearChange}
         isYearSelectorOpen
         showYearOnly
         locale={locale}

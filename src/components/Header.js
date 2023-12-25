@@ -8,6 +8,7 @@ const Header = ({
   maximumDate,
   minimumDate,
   onMonthChange,
+  onYearChange,
   activeDate,
   monthChangeDirection,
   onMonthSelect,
@@ -113,7 +114,11 @@ const Header = ({
       child.classList.contains('-shownAnimated'),
     );
     if (isMonthChanging) return;
-    onMonthChange(direction);
+    if (showYearOnly) {
+      onYearChange(direction);
+    } else {
+      onMonthChange(direction);
+    }
   };
 
   // first button text is the one who shows the current month and year(initial active child)

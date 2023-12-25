@@ -61,10 +61,27 @@ const CalendarYearMonth = ({
     : getComputedActiveDate();
 
   const handleMonthChange = direction => {
+    const date = { ...activeDate };
+    if (direction === 'PREVIOUS') {
+      date.month -= 1;
+      if (date.month === 0) {
+        date.month = 12;
+        date.year -= 1;
+      }
+    } else {
+      date.month += 1;
+      if (date.month === 13) {
+        date.month = 1;
+        date.year += 1;
+      }
+    }
+
     setMainState({
       ...mainState,
+      activeDate: date,
       monthChangeDirection: direction,
     });
+    onChange({ year: date.year, month: date.month });
   };
 
   const selectMonth = newMonthNumber => {
