@@ -102,3 +102,5 @@ export const MAXIMUM_SELECTABLE_YEAR_SUM = 50;
 export const TYPE_SINGLE_DATE = 'SINGLE_DATE';
 export const TYPE_RANGE = 'RANGE';
 export const TYPE_MUTLI_DATE = 'MUTLI_DATE';
+export const TYPE_YEAR = 'YEAR';
+export const TYPE_YEAR_MONTH = 'YEAR_MONTH';

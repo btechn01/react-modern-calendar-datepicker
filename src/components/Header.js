@@ -17,6 +17,7 @@ const Header = ({
   isYearSelectorOpen,
   locale,
   showYearOnly,
+  type = 'day',
 }) => {
   const headerElement = useRef(null);
   const monthYearWrapperElement = useRef(null);
@@ -165,17 +166,20 @@ const Header = ({
 
   return (
     <div ref={headerElement} className="Calendar__header">
-      <button
-        className="Calendar__monthArrowWrapper -right"
-        onClick={() => {
-          onMonthChangeTrigger('PREVIOUS');
-        }}
-        aria-label={previousMonth}
-        type="button"
-        disabled={isPreviousMonthArrowDisabled}
-      >
-        <span className="Calendar__monthArrow" />
-      </button>
+      {type === 'day' && (
+        <button
+          className="Calendar__monthArrowWrapper -right"
+          onClick={() => {
+            onMonthChangeTrigger('PREVIOUS');
+          }}
+          aria-label={previousMonth}
+          type="button"
+          disabled={isPreviousMonthArrowDisabled}
+        >
+          <span className="Calendar__monthArrow" />
+        </button>
+      )}
+
       <div
         className="Calendar__monthYearContainer"
         ref={monthYearWrapperElement}
@@ -184,17 +188,19 @@ const Header = ({
         &nbsp;
         {monthYearButtons}
       </div>
-      <button
-        className="Calendar__monthArrowWrapper -left"
-        onClick={() => {
-          onMonthChangeTrigger('NEXT');
-        }}
-        aria-label={nextMonth}
-        type="button"
-        disabled={isNextMonthArrowDisabled}
-      >
-        <span className="Calendar__monthArrow" />
-      </button>
+      {type === 'day' && (
+        <button
+          className="Calendar__monthArrowWrapper -left"
+          onClick={() => {
+            onMonthChangeTrigger('NEXT');
+          }}
+          aria-label={nextMonth}
+          type="button"
+          disabled={isNextMonthArrowDisabled}
+        >
+          <span className="Calendar__monthArrow" />
+        </button>
+      )}
     </div>
   );
 };

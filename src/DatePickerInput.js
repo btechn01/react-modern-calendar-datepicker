@@ -2,7 +2,13 @@ import React from 'react';
 
 import { useLocaleUtils, useLocaleLanguage } from './shared/hooks';
 import { putZero, getValueType } from './shared/generalUtils';
-import { TYPE_SINGLE_DATE, TYPE_RANGE, TYPE_MUTLI_DATE } from './shared/constants';
+import {
+  TYPE_SINGLE_DATE,
+  TYPE_RANGE,
+  TYPE_MUTLI_DATE,
+  TYPE_YEAR,
+  TYPE_YEAR_MONTH,
+} from './shared/constants';
 
 const DatePickerInput = React.forwardRef(
   (
@@ -25,6 +31,18 @@ const DatePickerInput = React.forwardRef(
       const month = getLanguageDigits(putZero(value.month));
       const day = getLanguageDigits(putZero(value.day));
       return `${year}/${month}/${day}`;
+    };
+
+    const getYearValue = () => {
+      if (!value) return '';
+      return getLanguageDigits(value.year);
+    };
+
+    const getYearMonthValue = () => {
+      if (!value) return '';
+      const year = getLanguageDigits(value.year);
+      const month = getLanguageDigits(putZero(value.month));
+      return `${year}/${month}`;
     };
 
     const getDayRangeValue = () => {
@@ -51,6 +69,10 @@ const DatePickerInput = React.forwardRef(
       if (formatInputText()) return formatInputText();
       const valueType = getValueType(value);
       switch (valueType) {
+        case TYPE_YEAR:
+          return getYearValue();
+        case TYPE_YEAR_MONTH:
+          return getYearMonthValue();
         case TYPE_SINGLE_DATE:
           return getSingleDayValue();
         case TYPE_RANGE:

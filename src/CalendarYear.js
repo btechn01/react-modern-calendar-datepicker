@@ -96,6 +96,7 @@ const CalendarYear = ({
         isYearSelectorOpen
         showYearOnly
         locale={locale}
+        type="year"
       />
 
       <YearSelector

@@ -36,6 +36,7 @@ export interface CalendarProps<TValue extends Value> {
   calendarRangeEndClassName?: string;
   renderFooter?: React.FC;
   customDaysClassName?: CustomDayClassNameItem[];
+  type?: 'day' | 'year-month' | 'year';
 }
 
 export interface CalendarYearMonthProps<TValue extends Value> {

@@ -1,4 +1,10 @@
-import { TYPE_SINGLE_DATE, TYPE_RANGE, TYPE_MUTLI_DATE } from './constants';
+import {
+  TYPE_SINGLE_DATE,
+  TYPE_RANGE,
+  TYPE_MUTLI_DATE,
+  TYPE_YEAR,
+  TYPE_YEAR_MONTH,
+} from './constants';
 
 /*
   These utility functions don't depend on locale of the date picker(Persian or Gregorian)
@@ -46,6 +52,8 @@ const hasProperty = (object, propertyName) =>
 const getValueType = value => {
   if (Array.isArray(value)) return TYPE_MUTLI_DATE;
   if (hasProperty(value, 'from') && hasProperty(value, 'to')) return TYPE_RANGE;
+  if (hasProperty(value, 'year') && hasProperty(value, 'month')) return TYPE_YEAR_MONTH;
+  if (hasProperty(value, 'year')) return TYPE_YEAR;
   if (
     !value ||
     (hasProperty(value, 'year') && hasProperty(value, 'month') && hasProperty(value, 'day'))

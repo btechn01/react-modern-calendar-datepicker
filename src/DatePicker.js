@@ -1,9 +1,17 @@
-import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
+import React, { useState, useEffect, useRef, useLayoutEffect, useCallback } from 'react';
 
 import { Calendar } from './Calendar';
+import { CalendarYear } from './CalendarYear';
+import { CalendarYearMonth } from './CalendarYearMonth';
 import DatePickerInput from './DatePickerInput';
 import { getValueType } from './shared/generalUtils';
-import { TYPE_SINGLE_DATE, TYPE_MUTLI_DATE, TYPE_RANGE } from './shared/constants';
+import {
+  TYPE_SINGLE_DATE,
+  TYPE_MUTLI_DATE,
+  TYPE_RANGE,
+  TYPE_YEAR,
+  TYPE_YEAR_MONTH,
+} from './shared/constants';
 
 const DatePicker = ({
   value,
@@ -34,6 +42,7 @@ const DatePicker = ({
   shouldHighlightWeekends,
   renderFooter,
   customDaysClassName,
+  type = 'day',
 }) => {
   const calendarContainerElement = useRef(null);
   const inputElement = useRef(null);
@@ -54,8 +63,9 @@ const DatePicker = ({
   useEffect(() => {
     const valueType = getValueType(value);
     if (valueType === TYPE_MUTLI_DATE) return; // no need to close the calendar
-    const shouldCloseCalendar =
-      valueType === TYPE_SINGLE_DATE ? !isCalendarOpen : !isCalendarOpen && value.from && value.to;
+    const shouldCloseCalendar = [TYPE_SINGLE_DATE, TYPE_YEAR, TYPE_YEAR_MONTH].includes(valueType)
+      ? !isCalendarOpen
+      : !isCalendarOpen && value.from && value.to;
     if (shouldCloseCalendar) inputElement.current.blur();
   }, [value, isCalendarOpen]);
 
@@ -108,12 +118,17 @@ const DatePicker = ({
     }
   }, [isCalendarOpen]);
 
-  const handleCalendarChange = newValue => {
-    const valueType = getValueType(value);
-    onChange(newValue);
-    if (valueType === TYPE_SINGLE_DATE) setCalendarVisiblity(false);
-    else if (valueType === TYPE_RANGE && newValue.from && newValue.to) setCalendarVisiblity(false);
-  };
+  const handleCalendarChange = useCallback(
+    newValue => {
+      const valueType = getValueType(newValue);
+      onChange(newValue);
+      if ([TYPE_SINGLE_DATE, TYPE_YEAR, TYPE_YEAR_MONTH].includes(valueType))
+        setCalendarVisiblity(false);
+      else if (valueType === TYPE_RANGE && newValue.from && newValue.to)
+        setCalendarVisiblity(false);
+    },
+    [onChange],
+  );
 
   const handleKeyUp = ({ key }) => {
     switch (key) {
@@ -163,29 +178,81 @@ const DatePicker = ({
               shouldPreventToggle.current = true;
             }}
           >
-            <Calendar
-              value={value}
-              onChange={handleCalendarChange}
-              calendarClassName={calendarClassName}
-              calendarTodayClassName={calendarTodayClassName}
-              calendarSelectedDayClassName={calendarSelectedDayClassName}
-              calendarRangeStartClassName={calendarRangeStartClassName}
-              calendarRangeBetweenClassName={calendarRangeBetweenClassName}
-              calendarRangeEndClassName={calendarRangeEndClassName}
-              disabledDays={disabledDays}
-              colorPrimary={colorPrimary}
-              colorPrimaryLight={colorPrimaryLight}
-              slideAnimationDuration={slideAnimationDuration}
-              onDisabledDayError={onDisabledDayError}
-              minimumDate={minimumDate}
-              maximumDate={maximumDate}
-              selectorStartingYear={selectorStartingYear}
-              selectorEndingYear={selectorEndingYear}
-              locale={locale}
-              shouldHighlightWeekends={shouldHighlightWeekends}
-              renderFooter={renderFooter}
-              customDaysClassName={customDaysClassName}
-            />
+            {type === 'year' && (
+              <CalendarYear
+                value={value}
+                onChange={handleCalendarChange}
+                calendarClassName={calendarClassName}
+                calendarTodayClassName={calendarTodayClassName}
+                calendarSelectedDayClassName={calendarSelectedDayClassName}
+                calendarRangeStartClassName={calendarRangeStartClassName}
+                calendarRangeBetweenClassName={calendarRangeBetweenClassName}
+                calendarRangeEndClassName={calendarRangeEndClassName}
+                disabledDays={disabledDays}
+                colorPrimary={colorPrimary}
+                colorPrimaryLight={colorPrimaryLight}
+                slideAnimationDuration={slideAnimationDuration}
+                onDisabledDayError={onDisabledDayError}
+                minimumDate={minimumDate}
+                maximumDate={maximumDate}
+                selectorStartingYear={selectorStartingYear}
+                selectorEndingYear={selectorEndingYear}
+                locale={locale}
+                shouldHighlightWeekends={shouldHighlightWeekends}
+                renderFooter={renderFooter}
+                customDaysClassName={customDaysClassName}
+              />
+            )}
+            {type === 'year-month' && (
+              <CalendarYearMonth
+                value={value}
+                onChange={handleCalendarChange}
+                calendarClassName={calendarClassName}
+                calendarTodayClassName={calendarTodayClassName}
+                calendarSelectedDayClassName={calendarSelectedDayClassName}
+                calendarRangeStartClassName={calendarRangeStartClassName}
+                calendarRangeBetweenClassName={calendarRangeBetweenClassName}
+                calendarRangeEndClassName={calendarRangeEndClassName}
+                disabledDays={disabledDays}
+                colorPrimary={colorPrimary}
+                colorPrimaryLight={colorPrimaryLight}
+                slideAnimationDuration={slideAnimationDuration}
+                onDisabledDayError={onDisabledDayError}
+                minimumDate={minimumDate}
+                maximumDate={maximumDate}
+                selectorStartingYear={selectorStartingYear}
+                selectorEndingYear={selectorEndingYear}
+                locale={locale}
+                shouldHighlightWeekends={shouldHighlightWeekends}
+                renderFooter={renderFooter}
+                customDaysClassName={customDaysClassName}
+              />
+            )}
+            {type === 'day' && (
+              <Calendar
+                value={value}
+                onChange={handleCalendarChange}
+                calendarClassName={calendarClassName}
+                calendarTodayClassName={calendarTodayClassName}
+                calendarSelectedDayClassName={calendarSelectedDayClassName}
+                calendarRangeStartClassName={calendarRangeStartClassName}
+                calendarRangeBetweenClassName={calendarRangeBetweenClassName}
+                calendarRangeEndClassName={calendarRangeEndClassName}
+                disabledDays={disabledDays}
+                colorPrimary={colorPrimary}
+                colorPrimaryLight={colorPrimaryLight}
+                slideAnimationDuration={slideAnimationDuration}
+                onDisabledDayError={onDisabledDayError}
+                minimumDate={minimumDate}
+                maximumDate={maximumDate}
+                selectorStartingYear={selectorStartingYear}
+                selectorEndingYear={selectorEndingYear}
+                locale={locale}
+                shouldHighlightWeekends={shouldHighlightWeekends}
+                renderFooter={renderFooter}
+                customDaysClassName={customDaysClassName}
+              />
+            )}
           </div>
           <div className="DatePicker__calendarArrow" />
         </>

@@ -121,6 +121,7 @@ const CalendarYearMonth = ({
         monthChangeDirection={mainState.monthChangeDirection}
         isYearSelectorOpen={mainState.isYearSelectorOpen}
         locale={locale}
+        type="year-month"
       />
 
       <MonthSelector
