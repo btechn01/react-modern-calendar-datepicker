@@ -52,8 +52,10 @@ const hasProperty = (object, propertyName) =>
 const getValueType = value => {
   if (Array.isArray(value)) return TYPE_MUTLI_DATE;
   if (hasProperty(value, 'from') && hasProperty(value, 'to')) return TYPE_RANGE;
-  if (hasProperty(value, 'year') && hasProperty(value, 'month')) return TYPE_YEAR_MONTH;
-  if (hasProperty(value, 'year')) return TYPE_YEAR;
+  if (hasProperty(value, 'year') && hasProperty(value, 'month') && !hasProperty(value, 'day'))
+    return TYPE_YEAR_MONTH;
+  if (hasProperty(value, 'year') && !hasProperty(value, 'month') && !hasProperty(value, 'day'))
+    return TYPE_YEAR;
   if (
     !value ||
     (hasProperty(value, 'year') && hasProperty(value, 'month') && hasProperty(value, 'day'))

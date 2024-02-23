@@ -9,7 +9,7 @@ const App = () => {
   const [selectedDay, setValue] = useState(null);
   return (
     <DatePicker
-      type="year-month"
+      type="year"
       value={selectedDay}
       onChange={val => {
         setValue(val);
